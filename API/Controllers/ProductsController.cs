@@ -10,13 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using Microsoft.OpenApi.Writers;
 using API.DTOs;
+using API.Errors;
 using AutoMapper;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController:ControllerBase
+    public class ProductsController:BaseApiController
     {
         IProductRepository _repo;
         private readonly IGenericRepository<Product> _repoProd;
@@ -63,6 +62,8 @@ namespace API.Controllers
 
         }
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             //return Ok(await _repo.GetProduct(id)) //way 1=> normal repository
